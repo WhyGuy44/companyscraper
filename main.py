@@ -31,7 +31,6 @@ def generate(urlstring):
 
   homeText = re.sub(r'\s+', ' ', homeText)
   homeText = re.sub(r'Join now to see.*', ' ', homeText)
-  homeText = re.sub(r'.*"description":', ' ', homeText)
   homeText = re.sub(r'Like Comment Share', ' ', homeText)
   vertexai.init(project="eurecax", location="us-central1")
   model = GenerativeModel("gemini-1.0-pro-002")
@@ -41,9 +40,12 @@ def generate(urlstring):
       safety_settings=safety_settings,
       stream=True,
   )
-  out = ""
   for response in responses:
      print(response.text, end="")
+
+  about = re.search(r'description":"(.*?)","numberO', homeText)
+  if about != NONE:
+    print("\n\nAbout Section: ", about.group(1))
 
   
 
